@@ -1,8 +1,25 @@
 # android-journey
 Memos from experimenting with native android app development
 
+- [String resources](#string-resources)
 - [Making pixels density-independent](#making-pixels-density-independent)
 - [Positioning elements relative to each other](#positioning-elements-relative-to-each-other)
+
+## String resources
+Wherever there is a hardcoded string in your code, it should be moved to an xml file. You can reference string resources stored in xml files in the `res` directory using the static `R` class.
+
+#### `strings.xml`
+```xml
+<resources>
+    <string name="my_button">press me</string>
+</resources>
+```
+
+#### `MyActivity.kt`
+```kotlin
+val button = Button(this)
+button.text = getString(R.string.my_button)
+```
 
 ## Making pixels density-independent
 `TypedValue.applyDimension` knows about the pixel density of the device.
