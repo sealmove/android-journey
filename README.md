@@ -4,6 +4,7 @@ Memos from experimenting with native android app development
 - [String resources](#string-resources)
 - [Making pixels density-independent](#making-pixels-density-independent)
 - [Positioning elements relative to each other](#positioning-elements-relative-to-each-other)
+- [Gestures](#gestures)
 
 ## String resources
 Wherever there is a hardcoded string in your code, it should be moved to an xml file. You can reference string resources stored in xml files in the `res` directory using the static `R` class.
@@ -54,4 +55,42 @@ details.addRule(RelativeLayout.ABOVE, button1.id)
 
 mainLayout.addView(button1)
 mainLayout.addView(button2, details)
+```
+
+## Gestures
+Android supports many kinds of events related to the touchscreen; for example there is the standard `onClick` event which you can find for desktops.
+We all know that phones and tablets support more elaborate distinction between different ways you touch the screen. These _different ways_ are called _gestures_ and they are implemented as an extra layer on top of the more basic touch events.
+
+Gestures are detected and handled in activities. In order to use them, your `Activity` needs to implement the `GestureDetector.OnGestureListener` interface. Moreover, you need to override the `onTouchEvent` method which is the most generic touch event handler. By default, it doesn't know about gestures and therefore will interpret a touch in a more simplistic manner. Inside it you need a way to detect whether the incoming touch is a gesture or not. This is achieved with a `GestureDetectorCompat` object.
+
+```kotlin
+class MyActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
+    private lateinit var gestureDetector: GestureDetectorCompat
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        ...
+        gestureDetector = GestureDetectorCompat(this, this)
+    }
+
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        gestureDetector.onTouchEvent(event)
+        return super.onTouchEvent(event)
+    }
+}
+```
+
+### Double-tap
+In order to support double-tap, you have to additional implement the  `GestureDetector.OnDoubleTapListener` interface and also call the `setOnDoubleTapListener` method on your `GestureDetector`.
+
+
+```kotlin
+class MyActivity : AppCompatActivity(), GestureDetector.OnDoubleTapListener {
+    private lateinit var gestureDetector: GestureDetectorCompat
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        ...
+        gestureDetector = GestureDetectorCompat(this, this)
+        gestureDetector.setOnDoubleTapListener(this)
+    }
+}
 ```
