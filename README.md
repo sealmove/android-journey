@@ -1,4 +1,4 @@
-# android-journey
+# Android Journey
 Memos from experimenting with native android app development
 
 - [String resources](#string-resources)
